@@ -6,6 +6,7 @@ import com.gamebasic.game.dto.*;
 import com.gamebasic.game.entity.Game;
 import com.gamebasic.game.repository.GameRepository;
 import com.gamebasic.runcard.dto.CardResponse;
+import com.gamebasic.runcard.dto.DeckCount;
 import com.gamebasic.runcard.dto.RunCardRequest;
 import com.gamebasic.runcard.entity.RunCard;
 import com.gamebasic.runcard.repository.RunCardRepository;
@@ -16,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -102,6 +105,14 @@ public class GameService {
          List<Game> gameList=gameRepository.findAllByOrderByIdDesc();
          List<GameSummaryResponse> summaryResponseList=new ArrayList<>();
 
+         List<DeckCount> deckCountList=runCardRepository.countByGames(gameList);
+         Map<Long, Long> gameDeckCounts=new HashMap<>();
+
+         for(DeckCount dc:deckCountList)
+         {
+             gameDeckCounts.put(dc.getGameId(), dc.getCardCount());
+         }
+
          for(Game g:gameList)
          {
              summaryResponseList.add(new GameSummaryResponse(
@@ -112,7 +123,8 @@ public class GameService {
                      g.getPhase(),
                      g.getStatus(),
                      g.getCreatedAt(),
-                     g.getUpdatedAt()
+                     g.getUpdatedAt(),
+                     gameDeckCounts.getOrDefault(g.getId(), 0L)
              ));
          }
 

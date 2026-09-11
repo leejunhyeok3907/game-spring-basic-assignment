@@ -16,6 +16,7 @@ public class GameSummaryResponse {
     private final GameStatus status;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
+    private final Long deckSize;
 
     public GameSummaryResponse(
             Long id,
@@ -25,7 +26,8 @@ public class GameSummaryResponse {
             GamePhase phase,
             GameStatus status,
             LocalDateTime createdAt,
-            LocalDateTime updatedAt
+            LocalDateTime updatedAt,
+            Long deckSize
     ) {
         this.id = id;
         this.playerName = playerName;
@@ -35,5 +37,6 @@ public class GameSummaryResponse {
         this.status = status;
         this.createdAt=createdAt;
         this.updatedAt=updatedAt;
+        this.deckSize=deckSize;
     }
 }
